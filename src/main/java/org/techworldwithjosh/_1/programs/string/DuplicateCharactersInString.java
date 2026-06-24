@@ -1,23 +1,60 @@
 package org.techworldwithjosh._1.programs.string;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class DuplicateCharactersInString {
+    // ==================================
+    // Traditional Approach
+    // ==================================
+    public static void findDuplicatesTraditional(String str) {
+
+        // Store character frequencies
+        Map<Character, Integer> frequencyMap = new LinkedHashMap<>();
+
+        // Count occurrences of each character
+        for (char ch : str.toCharArray()) {
+            frequencyMap.put(ch, frequencyMap.getOrDefault(ch, 0) + 1);
+        }
+
+        System.out.println("Traditional Approach:");
+
+        // Print only duplicate characters
+        for (Map.Entry<Character, Integer> entry : frequencyMap.entrySet()) {
+            if (entry.getValue() > 1) {
+                System.out.println(entry.getKey() + " -> " + entry.getValue());
+            }
+        }
+    }
+
+    // ==================================
+    // Java 8 / 17 / 21 Stream Approach
+    // ==================================
+    public static void findDuplicatesStream(String str) {
+
+        Map<Character, Long> frequencyMap =
+                str.chars() // Convert String to IntStream
+                        .mapToObj(ch -> (char) ch) // Convert int ASCII values to Character
+                        .collect(Collectors.groupingBy(
+                                Function.identity(), // Group by same character
+                                LinkedHashMap::new, // Preserve insertion order
+                                Collectors.counting())); // Count occurrences
+
+        frequencyMap.entrySet()
+                .stream() // Convert Map entries to Stream
+                .filter(entry -> entry.getValue() > 1) // Keep only duplicate characters
+                .forEach(entry -> System.out.println(entry.getKey() + " -> " + entry.getValue()));
+    }
+
     public static void main(String[] args) {
-        String inputeString = "Better Butter"; // {r=2, B=2, t=4, e=3}
-        String input = "JavaProgramming"; // {a=3, r=2, g=2, m=2}
 
-        Map<Character, Long> duplicates = input.chars()
-                .mapToObj(c -> (char) c)
-                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
-                .entrySet()
-                .stream()
-                .filter(entry -> entry.getValue() > 1)
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        String input = "programming";
 
-        System.out.println("Duplicate characters in the string: " + duplicates);
+        findDuplicatesTraditional(input);
+
+        findDuplicatesStream(input);
     }
 }
 

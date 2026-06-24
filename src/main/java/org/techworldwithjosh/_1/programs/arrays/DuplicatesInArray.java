@@ -1,38 +1,53 @@
 package org.techworldwithjosh._1.programs.arrays;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class DuplicatesInArray {
-    public static void main(String[] args) {
-        Integer[] inputArray = {1, 3, 5, 7, 3, 4, 5};
-        //add-in set
-        HashSet<Integer> hashSet = new HashSet<>(Arrays.asList(inputArray));
-        //for each to print
-        for (Integer integer : hashSet) {
-            System.out.print(integer + " ");
+    // =====================================
+    // Part 1 : Traditional Approach
+    // =====================================
+    public static void findDuplicatesTraditional(int[] arr) {
+
+        Set<Integer> uniqueElements = new HashSet<>(); // Stores unique elements
+        Set<Integer> duplicateElements = new HashSet<>(); // Stores duplicates
+
+        for (int num : arr) { // Traverse array
+            if (!uniqueElements.add(num)) { // add() returns false if already present
+                duplicateElements.add(num); // Duplicate found
+            }
         }
+        System.out.println("Traditional Approach:");
+        duplicateElements.forEach(System.out::println);
+    }
 
-        // Remove duplicates using Stream distinct()
-        List<Integer> uniqueNumbers = Arrays.stream(inputArray)
-                .distinct()
-                .toList();
+    // =====================================
+    // Part 2 : Java 8 / 17 / 21 Approach
+    // =====================================
+    public static void findDuplicatesModern(int[] arr) {
 
-        // Print the result
-        System.out.println("Unique elements: " + uniqueNumbers);
+        System.out.println("\nJava 8 / 17 / 21 Approach:");
 
-        // Find duplicates using Java 8 Streams
-        List<Integer> duplicates = Arrays.stream(inputArray)
-                .collect(Collectors.groupingBy(num -> num, Collectors.counting())) // Count occurrences
-                .entrySet().stream()
-                .filter(entry -> entry.getValue() > 1) // Filter duplicates
-                .map(Map.Entry::getKey)
-                .toList();
+        Arrays.stream(arr) // Convert array to IntStream
+                .boxed() // Convert int to Integer
+                .collect(Collectors.groupingBy(
+                        Function.identity(), // Group by element itself
+                        Collectors.counting())) // Count occurrences
+                .entrySet()
+                .stream()
+                .filter(entry -> entry.getValue() > 1) // Keep duplicates only
+                .map(Map.Entry::getKey) // Extract duplicate number
+                .forEach(System.out::println); // Print duplicates
+    }
 
-        // Print duplicate elements
-        System.out.println("Duplicate elements: " + duplicates);
+    public static void main(String[] args) {
+
+        int[] arr = {1, 2, 3, 4, 2, 5, 3, 6, 1};
+
+        // Part 1
+        findDuplicatesTraditional(arr);
+        // Part 2
+        findDuplicatesModern(arr);
     }
 }

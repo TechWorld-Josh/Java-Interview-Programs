@@ -1,27 +1,55 @@
 package org.techworldwithjosh._2.data_structure;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 public class Swap2Number {
+
     public static void main(String[] args) {
-        int a = 5;
-        int b = 10;
 
-        // Swap without using a temporary variable using mathematical operations
-        a = a + b;  // a becomes the sum of a and b
-        b = a - b;  // b becomes the original value of a
-        a = a - b;  // a becomes the original value of b
+        int firstNumber = 10;
+        int secondNumber = 20;
 
-        // Swap using XOR without using a temporary variable
-//        a = a ^ b;  // XOR the two numbers and store in a
-//        b = a ^ b;  // XOR the result with b to get the original value of a
-//        a = a ^ b;  // XOR the result with b to get the original value of b
+        // =====================================
+        // Part 1 : Traditional Approach
+        // =====================================
 
-        System.out.println("Swapped numbers: " + a + " and " + b);
+        int first = firstNumber;                    // Copy first number
+        int second = secondNumber;                  // Copy second number
 
-        //Using temp
-        int temp = a;
-        a = b;
-        b = temp;
+        System.out.println("Traditional Approach:");
 
-        System.out.println("Swapped numbers: " + a + " and " + b);
+        System.out.println("Before Swapping:");
+        System.out.println("First Number  = " + first);
+        System.out.println("Second Number = " + second);
+
+        int temp = first;                           // Store first number
+
+        first = second;                             // Assign second to first
+
+        second = temp;                              // Assign temp to second
+
+        System.out.println("\nAfter Swapping:");
+        System.out.println("First Number  = " + first);
+        System.out.println("Second Number = " + second);
+
+        // =====================================
+        // Part 2 : Java 8 / 17 / 21 Approach
+        // =====================================
+
+        AtomicInteger num1 = new AtomicInteger(firstNumber);
+        AtomicInteger num2 = new AtomicInteger(secondNumber);
+
+        System.out.println("\nJava 8 / 17 / 21 Approach:");
+
+        System.out.println("Before Swapping:");
+        System.out.println("First Number  = " + num1.get());
+        System.out.println("Second Number = " + num2.get());
+
+        num1.getAndUpdate(value -> num2.get());     // Update first
+        num2.set(firstNumber);                      // Update second
+
+        System.out.println("\nAfter Swapping:");
+        System.out.println("First Number  = " + num1.get());
+        System.out.println("Second Number = " + num2.get());
     }
 }

@@ -2,42 +2,45 @@ package org.techworldwithjosh._3.dsa;
 
 import java.util.PriorityQueue;
 
-class KthLargest {
+import java.util.Arrays;
+import java.util.PriorityQueue;
 
-    PriorityQueue<Integer> pq;
-    int K;
-
-    public KthLargest(int k, int[] nums) {
-        K = k;
-        pq = new PriorityQueue<>();
-        for (int i : nums) {
-            if (pq.size() < k) pq.add(i);
-            else {
-                if (pq.peek() < i) {
-                    pq.poll();
-                    pq.add(i);
-                }
-            }
-        }
-    }
-
-    public int add(int val) {
-        if (pq.size() < K) pq.add(val);
-        else {
-            if (pq.peek() < val) {
-                pq.poll();
-                pq.add(val);
-            }
-        }
-        return pq.peek();
-    }
+public class KthLargest {
 
     public static void main(String[] args) {
-        int k = 3;
-        int[] nums = {4, 5, 8, 2};
 
-        KthLargest kthLargest = new KthLargest(k, nums);
-        System.out.println("KthLargest initialized with k=" + k + " and nums=" + java.util.Arrays.toString(nums));
-        System.out.println("Initial " + k + "th largest element: " + kthLargest.pq.peek());
+        int[] inputArray = {7, 10, 4, 3, 20, 15};
+
+        int k = 3;
+
+        // =====================================
+        // Part 1 : Traditional Approach
+        // =====================================
+
+        int[] traditionalArray = inputArray.clone();     // Create copy
+
+        Arrays.sort(traditionalArray);                   // Sort ascending
+
+        int kthLargestTraditional = traditionalArray[traditionalArray.length - k]; // kth largest
+
+        System.out.println("Traditional Approach:");
+        System.out.println(k + "rd Largest Element = " + kthLargestTraditional);
+
+        // =====================================
+        // Part 2 : Java 8 / 17 / 21 Approach
+        // =====================================
+
+        PriorityQueue<Integer> minHeap = new PriorityQueue<>();                  // Min Heap
+
+        for (int num : inputArray) {                    // Traverse array
+            minHeap.offer(num);                         // Add element
+            if (minHeap.size() > k) {                  // Keep only k elements
+                minHeap.poll();                        // Remove smallest
+            }
+        }
+        int kthLargestModern = minHeap.peek();         // Top = kth largest
+
+        System.out.println("\nJava 8 / 17 / 21 Approach:");
+        System.out.println(k + "rd Largest Element = " + kthLargestModern);
     }
 }

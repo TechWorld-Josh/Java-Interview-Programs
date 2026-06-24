@@ -1,16 +1,41 @@
 package org.techworldwithjosh._2.data_structure;
 
+import java.util.Arrays;
+
 public class SumOfAllDigitsNumber {
+
     public static void main(String[] args) {
-        Integer inputNumber = 47862; // 47862 = 27
 
-        // Sum the digits using Java 8 Streams
-        int sum = inputNumber.toString() // Convert number to string
-                .chars() // Convert each character to an IntStream
-                .map(Character::getNumericValue) // Convert char to int
-                .sum(); // Sum all digits
+        int number = 12345;
 
-        System.out.println("Sum of digits: " + sum);
+        // =====================================
+        // Part 1 : Traditional Approach
+        // =====================================
 
+        int temp = number;                          // Copy original number
+        int traditionalSum = 0;                     // Store digit sum
+
+        while (temp > 0) {                          // Process each digit
+
+            traditionalSum += temp % 10;            // Extract last digit
+
+            temp = temp / 10;                       // Remove last digit
+        }
+
+        System.out.println("Traditional Approach:");
+        System.out.println("Sum of Digits = " + traditionalSum);
+
+        // =====================================
+        // Part 2 : Java 8 / 17 / 21 Approach
+        // =====================================
+
+        int modernSum =
+                String.valueOf(number)              // Convert number to String
+                        .chars()                    // IntStream of characters
+                        .map(ch -> ch - '0')        // Convert char to digit
+                        .sum();                     // Sum all digits
+
+        System.out.println("\nJava 8 / 17 / 21 Approach:");
+        System.out.println("Sum of Digits = " + modernSum);
     }
 }
